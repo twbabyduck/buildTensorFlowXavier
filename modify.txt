@@ -1,0 +1,20 @@
+ref:[https://github.com/tensorflow/tensorflow/issues/21852]
+
+
+In ./third_party/gpus/crosstool/BUILD.tpl, changed
+
+cc_toolchain_suite(
+    name = "toolchain",
+    toolchains = {
+        ...
+    },
+)
+to
+
+cc_toolchain_suite(
+    name = "toolchain",
+    toolchains = {
+        ...
+        "aarch64": ":cc-compiler-local",
+    },
+)
