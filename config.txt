@@ -44,7 +44,7 @@ Please specify the locally installed NCCL version you want to use. [Default is t
 
 Please specify a list of comma-separated Cuda compute capabilities you want to build with.
 You can find the compute capability of your device at: https://developer.nvidia.com/cuda-gpus.
-Please note that each additional compute capability significantly increases your build time and binary size. [Default is: 3.5,7.0]: 7.0,7.2
+Please note that each additional compute capability significantly increases your build time and binary size. [Default is: 3.5,7.0]: 7.2,7.5
 
 
 Do you want to use clang as CUDA compiler? [y/N]: N

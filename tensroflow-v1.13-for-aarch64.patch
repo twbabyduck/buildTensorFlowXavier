@@ -1,0 +1,52 @@
+diff --git a/tensorflow/lite/kernels/internal/BUILD b/tensorflow/lite/kernels/internal/BUILD
+index 4be3226..b52b5b3 100644
+--- a/tensorflow/lite/kernels/internal/BUILD
++++ b/tensorflow/lite/kernels/internal/BUILD
+@@ -30,7 +30,6 @@ NEON_FLAGS_IF_APPLICABLE = select({
+     ],
+     ":armv7a": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     "//conditions:default": [
+         "-O3",
+diff --git a/third_party/aws/BUILD.bazel b/third_party/aws/BUILD.bazel
+index 5426f79..82d8a0d 100644
+--- a/third_party/aws/BUILD.bazel
++++ b/third_party/aws/BUILD.bazel
+@@ -24,7 +24,9 @@ cc_library(
+         "@org_tensorflow//tensorflow:raspberry_pi_armeabi": glob([
+             "aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",
+         ]),
+-        "//conditions:default": [],
++        "//conditions:default": glob([
++            "aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",
++    ]),
+     }) + glob([
+         "aws-cpp-sdk-core/include/**/*.h",
+         "aws-cpp-sdk-core/source/*.cpp",
+diff --git a/third_party/gpus/crosstool/BUILD.tpl b/third_party/gpus/crosstool/BUILD.tpl
+index db76306..9539009 100644
+--- a/third_party/gpus/crosstool/BUILD.tpl
++++ b/third_party/gpus/crosstool/BUILD.tpl
+@@ -23,6 +23,7 @@ cc_toolchain_suite(
+         "darwin|compiler": ":cc-compiler-darwin",
+         "x64_windows|msvc-cl": ":cc-compiler-windows",
+         "x64_windows": ":cc-compiler-windows",
++    "aarch64": ":cc-compiler-local",
+         "arm": ":cc-compiler-local",
+         "k8": ":cc-compiler-local",
+         "piii": ":cc-compiler-local",
+diff --git a/third_party/nccl/build_defs.bzl.tpl b/third_party/nccl/build_defs.bzl.tpl
+index 42de79c..f37a129 100644
+--- a/third_party/nccl/build_defs.bzl.tpl
++++ b/third_party/nccl/build_defs.bzl.tpl
+@@ -87,7 +87,7 @@ def rdc_copts():
+     # The global functions can not have a lower register count than the
+     # device functions. This is enforced by setting a fixed register count.
+     # https://github.com/NVIDIA/nccl/blob/f93fe9bfd94884cec2ba711897222e0df5569a53/makefiles/common.mk#L48
+-    maxrregcount = "-maxrregcount=96"
++    maxrregcount = "-maxrregcount=80"
+ 
+     return cuda_default_copts() + select({
+         "@local_config_cuda//cuda:using_nvcc": [

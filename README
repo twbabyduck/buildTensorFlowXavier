@@ -1,0 +1,21 @@
+# First Step
+```
+set_env.sh
+```
+# Second
+```
+bazel_dependencies.sh
+```
+```
+bazel.sh
+```
+# Third
+```
+tf_dependencies.sh
+```
+```
+tf.sh
+```
+
+# Please follow the instrucion from Dropbox Link
+https://paper.dropbox.com/doc/Installation-Guide-TensorFlow--AffCk1vmYTbUMo_J~SUY~eCFAg-WP2JPaxNqLBPUZPuJbglF
