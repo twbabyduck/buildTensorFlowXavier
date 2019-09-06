@@ -1,16 +1,17 @@
-You have bazel 0.19.2- (@non-git) installed.
+WARNING: ignoring LD_PRELOAD in environment.
+WARNING: --batch mode is deprecated. Please instead explicitly shut down your Bazel server using the command "bazel shutdown".
+You have bazel 0.24.1- (@non-git) installed.
 Please specify the location of python. [Default is /usr/bin/python]: 
 
 
 Found possible Python library paths:
-  /opt/ros/kinetic/lib/python2.7/dist-packages
   /usr/local/lib/python2.7/dist-packages
   /usr/lib/python2.7/dist-packages
-  /media/nvidia/AppWork/sensing-subsystem/devel/lib/python2.7/dist-packages
-Please input the desired Python library path to use.  Default is [/opt/ros/kinetic/lib/python2.7/dist-packages]
-/usr/local/lib/python2.7/dist-packages
-Do you wish to build TensorFlow with XLA JIT support? [Y/n]: Y
-XLA JIT support will be enabled for TensorFlow.
+  /opt/ros/melodic/lib/python2.7/dist-packages
+Please input the desired Python library path to use.  Default is [/usr/local/lib/python2.7/dist-packages]
+
+Do you wish to build TensorFlow with XLA JIT support? [Y/n]: N
+No XLA JIT support will be enabled for TensorFlow.
 
 Do you wish to build TensorFlow with OpenCL SYCL support? [y/N]: N
 No OpenCL SYCL support will be enabled for TensorFlow.
@@ -21,30 +22,23 @@ No ROCm support will be enabled for TensorFlow.
 Do you wish to build TensorFlow with CUDA support? [y/N]: Y
 CUDA support will be enabled for TensorFlow.
 
-Please specify the CUDA SDK version you want to use. [Leave empty to default to CUDA 10.0]: 10.0
-
-
-Please specify the location where CUDA 10.0 toolkit is installed. Refer to README.md for more details. [Default is /usr/local/cuda]: 
-
-
-Please specify the cuDNN version you want to use. [Leave empty to default to cuDNN 7]: 7.3.1
-
-
-Please specify the location where cuDNN 7 library is installed. Refer to README.md for more details. [Default is /usr/local/cuda]: 
-
-
-Do you wish to build TensorFlow with TensorRT support? [y/N]: y
+Do you wish to build TensorFlow with TensorRT support? [y/N]: Y
 TensorRT support will be enabled for TensorFlow.
 
-Please specify the location where TensorRT is installed. [Default is /usr/lib/aarch64-linux-gnu]:
+Found CUDA 10.0 in:
+    /usr/local/cuda/lib64
+    /usr/local/cuda/include
+Found cuDNN 7 in:
+    /usr/lib/aarch64-linux-gnu
+    /usr/include
+Found TensorRT 5 in:
+    /usr/lib/aarch64-linux-gnu
+    /usr/include/aarch64-linux-gnu
 
 
-Please specify the locally installed NCCL version you want to use. [Default is to use https://github.com/nvidia/nccl]: 
-
-
-Please specify a list of comma-separated Cuda compute capabilities you want to build with.
+Please specify a list of comma-separated CUDA compute capabilities you want to build with.
 You can find the compute capability of your device at: https://developer.nvidia.com/cuda-gpus.
-Please note that each additional compute capability significantly increases your build time and binary size. [Default is: 3.5,7.0]: 7.2,7.5
+Please note that each additional compute capability significantly increases your build time and binary size, and that TensorFlow only supports compute capabilities >= 3.5 [Default is: 3.5,7.0]: 7.2
 
 
 Do you want to use clang as CUDA compiler? [y/N]: N
@@ -68,12 +62,13 @@ Preconfigured Bazel build configs. You can use any of the below by adding "--con
 	--config=gdr         	# Build with GDR support.
 	--config=verbs       	# Build with libverbs support.
 	--config=ngraph      	# Build with Intel nGraph support.
+	--config=numa        	# Build with NUMA support.
 	--config=dynamic_kernels	# (Experimental) Build kernels into separate shared objects.
 Preconfigured Bazel build configs to DISABLE default on features:
 	--config=noaws       	# Disable AWS S3 filesystem support.
 	--config=nogcp       	# Disable GCP support.
 	--config=nohdfs      	# Disable HDFS support.
-	--config=noignite    	# Disable Apacha Ignite support.
+	--config=noignite    	# Disable Apache Ignite support.
 	--config=nokafka     	# Disable Apache Kafka support.
 	--config=nonccl      	# Disable NVIDIA NCCL support.
 Configuration finished

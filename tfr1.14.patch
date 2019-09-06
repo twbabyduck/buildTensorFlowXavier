@@ -1,0 +1,104 @@
+diff --git a/tensorflow/lite/kernels/internal/BUILD b/tensorflow/lite/kernels/internal/BUILD
+index 5bafcdc00c..a749a5316b 100644
+--- a/tensorflow/lite/kernels/internal/BUILD
++++ b/tensorflow/lite/kernels/internal/BUILD
+@@ -22,15 +22,12 @@ HARD_FP_FLAGS_IF_APPLICABLE = select({
+ NEON_FLAGS_IF_APPLICABLE = select({
+     ":arm": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     ":armeabi-v7a": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     ":armv7a": [
+         "-O3",
+-        "-mfpu=neon",
+     ],
+     "//conditions:default": [
+         "-O3",
+diff --git a/tensorflow/lite/kernels/internal/depthwiseconv_quantized_test.cc b/tensorflow/lite/kernels/internal/depthwiseconv_quantized_test.cc
+index 287f0a46be..c9bcb35c94 100644
+--- a/tensorflow/lite/kernels/internal/depthwiseconv_quantized_test.cc
++++ b/tensorflow/lite/kernels/internal/depthwiseconv_quantized_test.cc
+@@ -167,7 +167,8 @@ inline void DispatchDepthwiseConv(
+       // This is compiled-in even if dot-product instructions are unavailable.
+       // However, tests should skip dot-product testing in that case and not
+       // call this code.
+-#if defined(__aarch64__) && !defined(GOOGLE_L4T)
++#if defined(__aarch64__) && !defined(GOOGLE_L4T) && defined(__ANDROID__) && \
++    defined(__clang__)
+       DotProduct3x3KernelType kernel_type =
+           optimized_ops::depthwise_conv::CategorizeDotProductKernel(
+               input_shape, filter_shape, params);
+@@ -691,7 +692,8 @@ void TestOneDepthwiseConv3x3Filter(
+ }
+ 
+ void TestOneNeonDot3x3(const TestParam& test_param) {
+-#if defined(__aarch64__) && !defined(GOOGLE_L4T)
++#if defined(__aarch64__) && !defined(GOOGLE_L4T) && defined(__ANDROID__) && \
++    defined(__clang__)
+   CpuBackendContext backend_context;
+   ruy::Context* ruy_context = backend_context.ruy_context();
+   const auto ruy_paths = ruy_context != nullptr
+@@ -856,7 +858,8 @@ INSTANTIATE_TEST_SUITE_P(
+     TestParam::TestNameSuffix);
+ #endif
+ 
+-#if defined(__aarch64__) && !defined(GOOGLE_L4T)
++#if defined(__aarch64__) && !defined(GOOGLE_L4T) && defined(__ANDROID__) && \
++    defined(__clang__)
+ INSTANTIATE_TEST_SUITE_P(
+     NeonAsm, DepthwiseConvTest,
+     testing::Combine(
+diff --git a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8.h b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8.h
+index edf59248e1..8957425d34 100644
+--- a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8.h
++++ b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8.h
+@@ -2007,7 +2007,8 @@ inline void DepthwiseConvWithRounding(
+ 
+ // Enable for arm64 except for the Nvidia Linux 4 Tegra (L4T) running on
+ // Jetson TX-2. This compiler does not support the offsetof() macro.
+-#if defined(__aarch64__) && !defined(GOOGLE_L4T)
++#if defined(__aarch64__) && !defined(GOOGLE_L4T) && defined(__ANDROID__) && \
++    defined(__clang__)
+   // Dispatch to dot-product 3x3 kernels when supported.
+ 
+   ruy::Context* ruy_context = cpu_backend_context->ruy_context();
+@@ -2030,6 +2031,8 @@ inline void DepthwiseConvWithRounding(
+     }
+   }
+ 
++#elif defined(__aarch64__) && !defined(GOOGLE_L4T)
++
+   // Dispatch to non-dot-product 3x3 kernels when supported.
+ 
+   const int stride_width = params.stride_width;
+diff --git a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
+index 5b570eed18..eef46efe96 100644
+--- a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
++++ b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
+@@ -5790,7 +5790,8 @@ struct WorkspacePrefetchWrite<
+ 
+ #endif  // USE_NEON &&__aarch64__
+ 
+-#if defined(__aarch64__) && !defined(GOOGLE_L4T)
++#if defined(__aarch64__) && !defined(GOOGLE_L4T) && defined(__ANDROID__) && \
++    defined(__clang__)
+ // Dot product ops hard-coded
+ 
+ template <>
+diff --git a/third_party/aws/BUILD.bazel b/third_party/aws/BUILD.bazel
+index 26ff2282fd..9080caa1c6 100644
+--- a/third_party/aws/BUILD.bazel
++++ b/third_party/aws/BUILD.bazel
+@@ -27,7 +27,7 @@ cc_library(
+         "@org_tensorflow//tensorflow:raspberry_pi_armeabi": glob([
+             "aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",
+         ]),
+-        "//conditions:default": [],
++        "//conditions:default": glob(["aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",]),
+     }) + glob([
+         "aws-cpp-sdk-core/include/**/*.h",
+         "aws-cpp-sdk-core/source/*.cpp",
