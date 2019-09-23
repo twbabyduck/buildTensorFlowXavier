@@ -10,8 +10,8 @@ Found possible Python library paths:
   /opt/ros/melodic/lib/python2.7/dist-packages
 Please input the desired Python library path to use.  Default is [/usr/local/lib/python2.7/dist-packages]
 
-Do you wish to build TensorFlow with XLA JIT support? [Y/n]: N
-No XLA JIT support will be enabled for TensorFlow.
+Do you wish to build TensorFlow with XLA JIT support? [Y/n]: Y
+XLA JIT support will be enabled for TensorFlow.
 
 Do you wish to build TensorFlow with OpenCL SYCL support? [y/N]: N
 No OpenCL SYCL support will be enabled for TensorFlow.
